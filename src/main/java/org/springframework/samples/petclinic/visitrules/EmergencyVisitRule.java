@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
  * day.
  */
 @Component
-@Order(20)
+@Order(100)
 class EmergencyVisitRule implements VisitRule {
 
 	@Override

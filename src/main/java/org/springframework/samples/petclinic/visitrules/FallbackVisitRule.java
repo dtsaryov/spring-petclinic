@@ -16,6 +16,7 @@
 
 package org.springframework.samples.petclinic.visitrules;
 
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +25,7 @@ import org.springframework.stereotype.Component;
  * without a triage decision.
  */
 @Component
-@Order(10)
+@Order(Ordered.LOWEST_PRECEDENCE)
 class FallbackVisitRule implements VisitRule {
 
 	@Override
