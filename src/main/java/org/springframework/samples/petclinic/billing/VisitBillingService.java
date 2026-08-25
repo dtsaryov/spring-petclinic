@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -32,7 +33,7 @@ public class VisitBillingService {
 
 	private final Map<Integer, BillingReceipt> receipts = new ConcurrentHashMap<>();
 
-	public VisitBillingService(BillingProcessor billingProcessor) {
+	public VisitBillingService(@Qualifier("cardBillingProcessor") BillingProcessor billingProcessor) {
 		this.billingProcessor = billingProcessor;
 	}
 
