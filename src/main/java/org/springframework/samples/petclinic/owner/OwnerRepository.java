@@ -15,10 +15,12 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -58,5 +60,21 @@ public interface OwnerRepository extends JpaRepository<Owner, Integer> {
 	 * input for id)
 	 */
 	Optional<Owner> findById(Integer id);
+
+	/**
+	 * Retrieve the {@link Owner}s from the data store that are registered in the given
+	 * city.
+	 * @param city the city to search for
+	 * @param sort the order to return the owners in
+	 * @return a List of matching {@link Owner}s (or an empty List if none found)
+	 */
+	List<Owner> findByCity(String city, Sort sort);
+
+	/**
+	 * Count the {@link Owner}s in the data store that are registered in the given city.
+	 * @param city the city to search for
+	 * @return the number of owners registered in that city
+	 */
+	long countByCity(String city);
 
 }
