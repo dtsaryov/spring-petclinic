@@ -97,7 +97,7 @@ class PetController {
 		dataBinder.setDisallowedFields("id", "*.id");
 	}
 
-	@GetMapping("/pets/new")
+	@GetMapping(path = "/pets/new", headers = "X-AI-HEADER")
 	public String initCreationForm(Owner owner, ModelMap model) {
 		Pet pet = new Pet();
 		owner.addPet(pet);
@@ -136,7 +136,7 @@ class PetController {
 		return "redirect:/owners/{ownerId}";
 	}
 
-	@GetMapping("/pets/{petId}/edit")
+	@GetMapping(path = "/pets/{petId}/edit", headers = "X-AI-HEADER")
 	public String initUpdateForm() {
 		return VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 	}

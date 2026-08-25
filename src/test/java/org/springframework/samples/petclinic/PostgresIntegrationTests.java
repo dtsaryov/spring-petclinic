@@ -87,7 +87,8 @@ public class PostgresIntegrationTests {
 	@Test
 	void ownerDetails() {
 		RestTemplate template = builder.baseUri("http://localhost:" + port).build();
-		ResponseEntity<String> result = template.exchange(RequestEntity.get("/owners/1").build(), String.class);
+		ResponseEntity<String> result = template
+			.exchange(RequestEntity.get("/owners/1").header("X-AI-HEADER", "value").build(), String.class);
 		assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
 

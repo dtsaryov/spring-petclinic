@@ -87,7 +87,7 @@ class VisitController {
 
 	// Spring MVC calls method loadPetWithVisit(...) before initNewVisitForm is
 	// called
-	@GetMapping("/owners/{ownerId}/pets/{petId}/visits/new")
+	@GetMapping(path = "/owners/{ownerId}/pets/{petId}/visits/new", headers = "X-AI-HEADER")
 	public String initNewVisitForm() {
 		return "pets/createOrUpdateVisitForm";
 	}

@@ -37,7 +37,14 @@ class WelcomeControllerTests {
 
 	@Test
 	void welcome() throws Exception {
-		mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("welcome"));
+		mockMvc.perform(get("/").header("X-AI-HEADER", "value"))
+			.andExpect(status().isOk())
+			.andExpect(view().name("welcome"));
+	}
+
+	@Test
+	void welcomeWithoutHeaderIsNotFound() throws Exception {
+		mockMvc.perform(get("/")).andExpect(status().isNotFound());
 	}
 
 }

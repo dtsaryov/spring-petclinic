@@ -82,7 +82,7 @@ class VetControllerTests {
 	@Test
 	void showVetListHtml() throws Exception {
 
-		mockMvc.perform(MockMvcRequestBuilders.get("/vets.html?page=1"))
+		mockMvc.perform(MockMvcRequestBuilders.get("/vets.html?page=1").header("X-AI-HEADER", "value"))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeExists("listVets"))
 			.andExpect(view().name("vets/vetList"));
@@ -90,11 +90,22 @@ class VetControllerTests {
 	}
 
 	@Test
+	void showVetListHtmlWithoutHeaderIsNotFound() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/vets.html?page=1")).andExpect(status().isNotFound());
+	}
+
+	@Test
 	void showResourcesVetList() throws Exception {
-		ResultActions actions = mockMvc.perform(get("/vets").accept(MediaType.APPLICATION_JSON))
+		ResultActions actions = mockMvc
+			.perform(get("/vets").header("X-AI-HEADER", "value").accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk());
 		actions.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 			.andExpect(jsonPath("$.vetList[0].id").value(1));
+	}
+
+	@Test
+	void showResourcesVetListWithoutHeaderIsNotFound() throws Exception {
+		mockMvc.perform(get("/vets").accept(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
 	}
 
 }

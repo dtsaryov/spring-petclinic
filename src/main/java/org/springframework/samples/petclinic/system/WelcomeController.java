@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 class WelcomeController {
 
-	@GetMapping("/")
+	@GetMapping(path = "/", headers = "X-AI-HEADER")
 	public String welcome() {
 		return "welcome";
 	}

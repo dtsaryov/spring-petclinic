@@ -61,7 +61,7 @@ class CrashControllerIntegrationTests {
 	@Test
 	void triggerExceptionJson() {
 		ResponseEntity<Map<String, Object>> resp = rest.exchange(
-				RequestEntity.get("http://localhost:" + port + "/oups").build(),
+				RequestEntity.get("http://localhost:" + port + "/oups").header("X-AI-HEADER", "value").build(),
 				new ParameterizedTypeReference<Map<String, Object>>() {
 				});
 		assertThat(resp).isNotNull();
@@ -78,6 +78,7 @@ class CrashControllerIntegrationTests {
 	void triggerExceptionHtml() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(List.of(MediaType.TEXT_HTML));
+		headers.set("X-AI-HEADER", "value");
 		ResponseEntity<String> resp = rest.exchange("http://localhost:" + port + "/oups", HttpMethod.GET,
 				new HttpEntity<>(headers), String.class);
 		assertThat(resp).isNotNull();
@@ -90,6 +91,15 @@ class CrashControllerIntegrationTests {
 		// Not the whitelabel error page:
 		assertThat(resp.getBody()).doesNotContain("Whitelabel Error Page",
 				"This application has no explicit mapping for");
+	}
+
+	@Test
+	void triggerExceptionWithoutHeaderIsNotFound() {
+		ResponseEntity<Map<String, Object>> resp = rest.exchange(
+				RequestEntity.get("http://localhost:" + port + "/oups").build(),
+				new ParameterizedTypeReference<Map<String, Object>>() {
+				});
+		assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 
 	@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class,

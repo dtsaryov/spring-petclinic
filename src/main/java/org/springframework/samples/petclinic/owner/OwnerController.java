@@ -69,7 +69,7 @@ class OwnerController {
 							+ ". Please ensure the ID is correct " + "and the owner exists in the database."));
 	}
 
-	@GetMapping("/owners/new")
+	@GetMapping(path = "/owners/new", headers = "X-AI-HEADER")
 	public String initCreationForm() {
 		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
@@ -86,12 +86,12 @@ class OwnerController {
 		return "redirect:/owners/" + owner.getId();
 	}
 
-	@GetMapping("/owners/find")
+	@GetMapping(path = "/owners/find", headers = "X-AI-HEADER")
 	public String initFindForm() {
 		return "owners/findOwners";
 	}
 
-	@GetMapping("/owners")
+	@GetMapping(path = "/owners", headers = "X-AI-HEADER")
 	public String processFindForm(@RequestParam(defaultValue = "1") int page, Owner owner, BindingResult result,
 			Model model) {
 		// allow parameterless GET request for /owners to return all records
@@ -136,7 +136,7 @@ class OwnerController {
 		return owners.findByLastNameStartingWith(lastname, pageable);
 	}
 
-	@GetMapping("/owners/{ownerId}/edit")
+	@GetMapping(path = "/owners/{ownerId}/edit", headers = "X-AI-HEADER")
 	public String initUpdateOwnerForm() {
 		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
@@ -166,7 +166,7 @@ class OwnerController {
 	 * @param ownerId the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
 	 */
-	@GetMapping("/owners/{ownerId}")
+	@GetMapping(path = "/owners/{ownerId}", headers = "X-AI-HEADER")
 	public ModelAndView showOwner(@PathVariable("ownerId") int ownerId) {
 		ModelAndView mav = new ModelAndView("owners/ownerDetails");
 		Optional<Owner> optionalOwner = this.owners.findById(ownerId);
