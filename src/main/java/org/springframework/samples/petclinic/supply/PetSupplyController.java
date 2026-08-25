@@ -19,6 +19,7 @@ package org.springframework.samples.petclinic.supply;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,16 +31,19 @@ class PetSupplyController {
 
 	private final PetSupplyClient petSupplyClient;
 
-	PetSupplyController(PetSupplyClient petSupplyClient) {
+	private final String catalogueUrl;
+
+	PetSupplyController(PetSupplyClient petSupplyClient,
+			@Value("${petclinic.supply.catalogue-url}") String catalogueUrl) {
 		this.petSupplyClient = petSupplyClient;
+		this.catalogueUrl = catalogueUrl;
 	}
 
 	@GetMapping("/supplies")
 	public Map<String, Object> listSupplies() {
-		PetSupplyClientImpl client = (PetSupplyClientImpl) this.petSupplyClient;
 		Map<String, Object> catalogue = new LinkedHashMap<>();
-		catalogue.put("catalogueUrl", client.getCatalogueUrl());
-		catalogue.put("supplies", client.findAvailableSupplies());
+		catalogue.put("catalogueUrl", this.catalogueUrl);
+		catalogue.put("supplies", this.petSupplyClient.findAvailableSupplies());
 		return catalogue;
 	}
 
