@@ -20,11 +20,14 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.samples.petclinic.system.VetJsonCompatibility;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import tools.jackson.databind.JsonNode;
 
 /**
  * @author Juergen Hoeller
@@ -37,8 +40,11 @@ class VetController {
 
 	private final VetRepository vetRepository;
 
-	public VetController(VetRepository vetRepository) {
+	private final VetJsonCompatibility vetJsonCompatibility;
+
+	public VetController(VetRepository vetRepository, VetJsonCompatibility vetJsonCompatibility) {
 		this.vetRepository = vetRepository;
+		this.vetJsonCompatibility = vetJsonCompatibility;
 	}
 
 	@GetMapping("/vets.html")
@@ -63,12 +69,12 @@ class VetController {
 	}
 
 	@GetMapping({ "/vets" })
-	public @ResponseBody Vets showResourcesVetList() {
+	public @ResponseBody JsonNode showResourcesVetList() {
 		// Here we are returning an object of type 'Vets' rather than a collection of Vet
 		// objects so it is simpler for JSon/Object mapping
 		Vets vets = new Vets();
 		vets.getVetList().addAll(this.vetRepository.findAll());
-		return vets;
+		return this.vetJsonCompatibility.toJson(vets);
 	}
 
 }

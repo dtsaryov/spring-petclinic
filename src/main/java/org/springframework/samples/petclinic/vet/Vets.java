@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.vet;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,12 +33,26 @@ public class Vets {
 
 	private List<Vet> vets;
 
+	private LocalDate generatedOn = LocalDate.now();
+
 	@XmlElement
 	public List<Vet> getVetList() {
 		if (vets == null) {
 			vets = new ArrayList<>();
 		}
 		return vets;
+	}
+
+	/**
+	 * The day this list was produced, so that consumers can tell how fresh it is.
+	 */
+	@XmlElement
+	public LocalDate getGeneratedOn() {
+		return this.generatedOn;
+	}
+
+	public void setGeneratedOn(LocalDate generatedOn) {
+		this.generatedOn = generatedOn;
 	}
 
 }
