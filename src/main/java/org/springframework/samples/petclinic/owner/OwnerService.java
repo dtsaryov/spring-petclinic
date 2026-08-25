@@ -36,11 +36,13 @@ public class OwnerService {
 	}
 
 	/**
-	 * Register every owner of an imported batch.
+	 * Register every owner of an imported batch. A batch is applied as a whole: if any
+	 * owner is rejected, none of them is registered.
 	 * @param batch the owners to register, in submission order
 	 * @return the registered owners, with their generated identifiers
 	 * @throws DuplicateOwnerException if one of the owners is already on file
 	 */
+	@Transactional
 	public List<Owner> registerBatch(List<Owner> batch) {
 		List<Owner> registered = new ArrayList<>();
 		for (Owner owner : batch) {
