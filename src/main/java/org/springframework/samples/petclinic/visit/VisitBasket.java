@@ -20,12 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
 
 /**
  * Holds the clinic services an owner has picked out while booking a visit, until the
  * booking is confirmed.
  */
 @Component
+@SessionScope
 public class VisitBasket {
 
 	private final List<String> items = new ArrayList<>();
