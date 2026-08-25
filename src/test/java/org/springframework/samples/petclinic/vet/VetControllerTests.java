@@ -16,6 +16,9 @@
 
 package org.springframework.samples.petclinic.vet;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -99,6 +102,14 @@ class VetControllerTests {
 			.andExpect(status().isOk());
 		actions.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 			.andExpect(jsonPath("$.vetList[0].id").value(1));
+	}
+
+	@Test
+	void showResourcesVetListUsesApiDateFormat() throws Exception {
+		String expectedDate = LocalDate.now().format(DateTimeFormatter.ofPattern(ApiJacksonConfiguration.DATE_PATTERN));
+		mockMvc.perform(get("/vets").accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.generatedOn").value(expectedDate));
 	}
 
 }
