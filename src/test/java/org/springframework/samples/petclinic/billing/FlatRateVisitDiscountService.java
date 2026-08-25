@@ -18,8 +18,8 @@ package org.springframework.samples.petclinic.billing;
 import org.springframework.samples.petclinic.owner.Owner;
 
 /**
- * Applies the same discount percentage to every owner. Useful for sample data sets and
- * for clinics that run a single clinic-wide promotion.
+ * Test double that applies the same discount percentage to every owner, so that a test
+ * can pin the discount a controller is expected to render.
  */
 public class FlatRateVisitDiscountService implements VisitDiscountService {
 
