@@ -23,12 +23,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 /**
  * Tests for {@link OwnerLookupService} in isolation from the persistence layer.
  */
 @SpringBootTest(classes = OwnerLookupService.class)
 class OwnerLookupServiceTests extends OwnerLookupTestSupport {
+
+	@MockitoBean
+	private OwnerRepository ownerRepository;
 
 	@Test
 	void findAllReturnsWhatTheRepositoryProvides() {

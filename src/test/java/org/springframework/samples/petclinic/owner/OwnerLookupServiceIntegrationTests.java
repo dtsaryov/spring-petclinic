@@ -18,9 +18,11 @@ package org.springframework.samples.petclinic.owner;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
@@ -28,6 +30,14 @@ import org.springframework.boot.test.context.SpringBootTest;
  */
 @SpringBootTest
 class OwnerLookupServiceIntegrationTests extends OwnerLookupTestSupport {
+
+	@Autowired
+	private OwnerRepository ownerRepository;
+
+	@Test
+	void theRepositoryIsTheRealSpringDataProxy() {
+		assertThat(Mockito.mockingDetails(this.ownerRepository).isMock()).isFalse();
+	}
 
 	@Test
 	void findAllReturnsTheSeededOwners() {
