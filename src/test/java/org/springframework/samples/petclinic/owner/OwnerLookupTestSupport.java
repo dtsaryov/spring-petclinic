@@ -16,17 +16,14 @@
 package org.springframework.samples.petclinic.owner;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 /**
- * Shared test configuration for the tests around {@link OwnerLookupService}. Holds the
- * collaborators every one of those tests needs, together with a small factory for sample
- * owners, so the individual test classes stay focused on their assertions.
+ * Shared test configuration for the tests around {@link OwnerLookupService}. Holds only
+ * what every one of those tests needs, whatever the surrounding context is: the service
+ * under test and a small factory for sample owners. Test doubles for the persistence
+ * layer belong to the individual test classes that want them.
  */
 public abstract class OwnerLookupTestSupport {
-
-	@MockitoBean
-	protected OwnerRepository ownerRepository;
 
 	@Autowired
 	protected OwnerLookupService ownerLookupService;
