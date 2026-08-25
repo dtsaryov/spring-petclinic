@@ -20,6 +20,7 @@ import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 /**
  * Application service for the {@link Owner} queries shared by the web layer and the
@@ -45,7 +46,8 @@ public class OwnerService {
 	 */
 	@Transactional(readOnly = true)
 	public List<Owner> listForCity(String city) {
-		return this.ownerRepository.findAll(BY_NAME);
+		Assert.hasText(city, "City must not be empty");
+		return this.ownerRepository.findByCity(city, BY_NAME);
 	}
 
 	/**
@@ -55,6 +57,7 @@ public class OwnerService {
 	 */
 	@Transactional(readOnly = true)
 	public long countForCity(String city) {
+		Assert.hasText(city, "City must not be empty");
 		return this.ownerRepository.countByCity(city);
 	}
 
