@@ -26,6 +26,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 /**
  * Issues and verifies the signed tokens that back the visit confirmation links mailed to
@@ -41,7 +42,13 @@ public class VisitConfirmationTokenService {
 
 	private final SecretKeySpec signingKey;
 
-	public VisitConfirmationTokenService(@Value("${petclinic.visit-token-secret}") String secret) {
+	public VisitConfirmationTokenService(@Value("${petclinic.visit-token-secret:}") String secret) {
+		if (!StringUtils.hasText(secret)) {
+			throw new IllegalStateException("No visit confirmation token secret is configured. "
+					+ "Set 'petclinic.visit-token-secret' (environment variable PETCLINIC_VISIT_TOKEN_SECRET) "
+					+ "to a stable secret shared by every instance of this deployment; "
+					+ "a per-instance or per-restart value invalidates confirmation links that were already sent.");
+		}
 		this.signingKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), ALGORITHM);
 	}
 
