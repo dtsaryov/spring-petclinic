@@ -38,7 +38,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.mysql.MySQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT,
+		properties = "petclinic.vet.report.template-compile-duration=0s")
 @ActiveProfiles("mysql")
 @Testcontainers(disabledWithoutDocker = true)
 @DisabledInNativeImage

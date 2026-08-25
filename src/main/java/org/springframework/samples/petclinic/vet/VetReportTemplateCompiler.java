@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,11 +27,11 @@ import org.springframework.stereotype.Component;
  * <p>
  * Compilation resolves every placeholder in the template and then runs a layout
  * optimization pass over the result. The work is done once; the compiled template is
- * reused for every report that is rendered afterwards.
+ * reused for every report that is rendered afterwards. The bean is initialized eagerly so
+ * that the cost is paid once at startup rather than by the first report request.
  *
  * @author Spring PetClinic contributors
  */
-@Lazy
 @Component
 class VetReportTemplateCompiler {
 

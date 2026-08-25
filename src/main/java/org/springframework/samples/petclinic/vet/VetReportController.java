@@ -15,7 +15,6 @@
  */
 package org.springframework.samples.petclinic.vet;
 
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +32,7 @@ class VetReportController {
 
 	private final VetReportTemplateCompiler templateCompiler;
 
-	VetReportController(VetRepository vetRepository, @Lazy VetReportTemplateCompiler templateCompiler) {
+	VetReportController(VetRepository vetRepository, VetReportTemplateCompiler templateCompiler) {
 		this.vetRepository = vetRepository;
 		this.templateCompiler = templateCompiler;
 	}
