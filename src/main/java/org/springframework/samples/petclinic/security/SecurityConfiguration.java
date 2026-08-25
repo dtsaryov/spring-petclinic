@@ -36,24 +36,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
 	/**
-	 * Rules for the browser facing part of the clinic.
-	 * @param http the security builder
-	 * @return the filter chain serving the Thymeleaf front end
-	 * @throws Exception if the chain cannot be built
-	 */
-	@Bean
-	@Order(1)
-	SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
-		http.securityMatcher("/**")
-			.authorizeHttpRequests(
-					(requests) -> requests.requestMatchers("/api/**").authenticated().anyRequest().permitAll())
-			.formLogin(Customizer.withDefaults())
-			.logout(Customizer.withDefaults())
-			.csrf((csrf) -> csrf.disable());
-		return http.build();
-	}
-
-	/**
 	 * Rules for the REST API consumed by integration partners.
 	 * @param http the security builder
 	 * @param apiToken the token partners are expected to present
@@ -61,7 +43,7 @@ public class SecurityConfiguration {
 	 * @throws Exception if the chain cannot be built
 	 */
 	@Bean
-	@Order(2)
+	@Order(1)
 	SecurityFilterChain apiSecurityFilterChain(HttpSecurity http, @Value("${petclinic.api.token:}") String apiToken)
 			throws Exception {
 		http.securityMatcher("/api/**")
@@ -70,6 +52,24 @@ public class SecurityConfiguration {
 			.exceptionHandling(
 					(exceptions) -> exceptions.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint()))
 			.addFilterBefore(new ApiTokenAuthenticationFilter(apiToken), UsernamePasswordAuthenticationFilter.class)
+			.csrf((csrf) -> csrf.disable());
+		return http.build();
+	}
+
+	/**
+	 * Rules for the browser facing part of the clinic. This chain matches everything the
+	 * API chain has not already claimed.
+	 * @param http the security builder
+	 * @return the filter chain serving the Thymeleaf front end
+	 * @throws Exception if the chain cannot be built
+	 */
+	@Bean
+	@Order(2)
+	SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
+		http.securityMatcher("/**")
+			.authorizeHttpRequests((requests) -> requests.anyRequest().permitAll())
+			.formLogin(Customizer.withDefaults())
+			.logout(Customizer.withDefaults())
 			.csrf((csrf) -> csrf.disable());
 		return http.build();
 	}
