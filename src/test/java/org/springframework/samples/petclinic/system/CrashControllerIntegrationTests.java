@@ -92,8 +92,11 @@ class CrashControllerIntegrationTests {
 				"This application has no explicit mapping for");
 	}
 
-	@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class,
-			DataSourceTransactionManagerAutoConfiguration.class, HibernateJpaAutoConfiguration.class })
+	@SpringBootApplication(
+			scanBasePackages = { "org.springframework.samples.petclinic.system",
+					"org.springframework.samples.petclinic.security" },
+			exclude = { DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class,
+					HibernateJpaAutoConfiguration.class })
 	static class TestConfiguration {
 
 	}
