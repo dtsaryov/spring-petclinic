@@ -15,38 +15,26 @@
  */
 package org.springframework.samples.petclinic.system;
 
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
-import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Renders the veterinarian JSON resource. The payload is converted up front so that the
  * representation stays the same whichever view ends up writing the response.
  * <p>
- * The mapper is taken from the context when one is published there and a stand-alone
- * mapper is used otherwise, which keeps the component usable outside a fully configured
- * application.
+ * The conversion uses the mapper configured for the JSON resources of the application, so
+ * that dates are rendered in the documented format.
  */
 @Component
 public class VetJsonCompatibility {
 
 	private final ObjectMapper mapper;
 
-	public VetJsonCompatibility(BeanFactory beanFactory) {
-		this.mapper = resolveMapper(beanFactory);
-	}
-
-	private static ObjectMapper resolveMapper(BeanFactory beanFactory) {
-		try {
-			return beanFactory.getBean("objectMapper", ObjectMapper.class);
-		}
-		catch (BeansException ex) {
-			return JsonMapper.builder().build();
-		}
+	public VetJsonCompatibility(@Qualifier("apiObjectMapper") ObjectMapper mapper) {
+		this.mapper = mapper;
 	}
 
 	public JsonNode toJson(Object payload) {
