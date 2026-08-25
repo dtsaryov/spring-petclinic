@@ -31,7 +31,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.vet.VetRepository;
 import org.springframework.web.client.RestTemplate;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = "logging.level.sql=DEBUG")
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT,
+		properties = { "logging.level.sql=DEBUG", "petclinic.vet.report.template-compile-duration=0s" })
 public class PetClinicIntegrationTests {
 
 	@LocalServerPort
