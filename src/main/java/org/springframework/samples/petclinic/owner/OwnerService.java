@@ -15,6 +15,7 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +52,7 @@ public class OwnerService {
 	 * @return the stored owner
 	 * @throws IllegalArgumentException if no owner has the given identifier
 	 */
+	@CacheEvict(cacheNames = "owners", key = "#ownerId")
 	@Transactional
 	public Owner updateOwner(Integer ownerId, OwnerContactDetails details) {
 		Owner owner = this.owners.findById(ownerId)
