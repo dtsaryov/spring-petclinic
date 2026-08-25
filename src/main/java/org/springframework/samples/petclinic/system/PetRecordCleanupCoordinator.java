@@ -17,13 +17,13 @@
 package org.springframework.samples.petclinic.system;
 
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerRepository;
@@ -43,7 +43,7 @@ import jakarta.annotation.PostConstruct;
  * @author Spring PetClinic
  */
 @Component
-public class PetRecordCleanupCoordinator implements InitializingBean {
+public class PetRecordCleanupCoordinator {
 
 	private static final Logger log = LoggerFactory.getLogger(PetRecordCleanupCoordinator.class);
 
@@ -51,7 +51,7 @@ public class PetRecordCleanupCoordinator implements InitializingBean {
 
 	private final ObjectProvider<OwnerRepository> owners;
 
-	private final List<String> registeredJobs = new CopyOnWriteArrayList<>();
+	private final Set<String> registeredJobs = new CopyOnWriteArraySet<>();
 
 	private final AtomicInteger executions = new AtomicInteger();
 
@@ -64,18 +64,16 @@ public class PetRecordCleanupCoordinator implements InitializingBean {
 		register(STALE_RECORD_SCAN);
 	}
 
-	@Override
-	public void afterPropertiesSet() {
-		register(STALE_RECORD_SCAN);
-	}
-
 	/**
 	 * Take responsibility for the given cleanup job and give it a first pass so that the
-	 * clinic starts with an up to date picture of its records.
+	 * clinic starts with an up to date picture of its records. A job that is already
+	 * registered is left untouched, so registering it again is a no-op.
 	 * @param jobName name of the cleanup job
 	 */
 	private void register(String jobName) {
-		this.registeredJobs.add(jobName);
+		if (!this.registeredJobs.add(jobName)) {
+			return;
+		}
 		runStaleRecordScan();
 	}
 
@@ -100,7 +98,7 @@ public class PetRecordCleanupCoordinator implements InitializingBean {
 
 	/**
 	 * The cleanup jobs this coordinator has taken responsibility for.
-	 * @return the registered job names
+	 * @return the registered job names, each of them exactly once
 	 */
 	public List<String> getRegisteredJobs() {
 		return List.copyOf(this.registeredJobs);
