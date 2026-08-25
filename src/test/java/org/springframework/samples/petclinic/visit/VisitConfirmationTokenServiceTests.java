@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 
 /**
  * Tests for {@link VisitConfirmationTokenService}.
@@ -48,6 +49,12 @@ class VisitConfirmationTokenServiceTests {
 		String token = new VisitConfirmationTokenService("another-visit-token-secret-9876543210").issueToken(7,
 				VISIT_DATE);
 		assertThat(this.service.verifyToken(7, VISIT_DATE, token)).isFalse();
+	}
+
+	@Test
+	void aMissingSecretIsRejectedAtStartup() {
+		assertThatIllegalStateException().isThrownBy(() -> new VisitConfirmationTokenService(""))
+			.withMessageContaining("PETCLINIC_VISIT_TOKEN_SECRET");
 	}
 
 	@Test
