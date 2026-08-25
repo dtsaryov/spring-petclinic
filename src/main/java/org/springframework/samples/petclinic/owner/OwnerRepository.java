@@ -59,4 +59,13 @@ public interface OwnerRepository extends JpaRepository<Owner, Integer> {
 	 */
 	Optional<Owner> findById(Integer id);
 
+	/**
+	 * Report whether an owner with the given last name and telephone number is already on
+	 * file.
+	 * @param lastName the last name to match, ignoring case
+	 * @param telephone the telephone number to match
+	 * @return {@literal true} if such an owner already exists
+	 */
+	boolean existsByLastNameIgnoreCaseAndTelephone(String lastName, String telephone);
+
 }
