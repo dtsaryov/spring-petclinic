@@ -52,4 +52,23 @@ class VisitBasketControllerTests {
 			.andExpect(jsonPath("$.items", contains("Dental cleaning")));
 	}
 
+	@Test
+	void eachSessionKeepsItsOwnBasket() throws Exception {
+		MockHttpSession first = new MockHttpSession();
+		MockHttpSession second = new MockHttpSession();
+
+		this.mockMvc.perform(post("/visit-basket/items").session(first).param("description", "Dental cleaning"))
+			.andExpect(status().isOk());
+		this.mockMvc.perform(post("/visit-basket/items").session(second).param("description", "Rabies vaccination"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.items", contains("Rabies vaccination")));
+
+		this.mockMvc.perform(get("/visit-basket/items").session(first))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.items", contains("Dental cleaning")));
+		this.mockMvc.perform(get("/visit-basket/items").session(second))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.items", contains("Rabies vaccination")));
+	}
+
 }
